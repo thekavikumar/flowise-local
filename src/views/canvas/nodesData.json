@@ -1,0 +1,809 @@
+[
+  {
+    "label": "Label Classifier",
+    "name": "LABEL_CLASSIFIER",
+    "type": "Output",
+    "category": "SwitchCaseTransformer",
+    "description": "A transformer which classifies an input into a label using an external API.",
+    "baseClasses": ["xMessage"],
+    "inputs": [
+      {
+        "label": "XMessage",
+        "name": "xmessage",
+        "type": "xMessage",
+        "list": true
+      },
+      {
+        "label": "URL",
+        "name": "url",
+        "type": "string"
+      },
+      {
+        "label": "Headers",
+        "name": "headers",
+        "type": "json",
+        "rows": 2,
+        "optional": true
+      },
+      {
+        "label": "Suppressed Labels",
+        "name": "suppressedLabels",
+        "type": "string",
+        "optional": true
+      },
+      {
+        "label": "Suppression Threshold",
+        "name": "suppressionThreshold",
+        "type": "number",
+        "optional": true
+      },
+      {
+        "label": "Supersede Threshold",
+        "name": "supersedeThreshold",
+        "type": "number",
+        "optional": true
+      },
+      {
+        "label": "Minimum Threshold",
+        "name": "minimumThreshold",
+        "type": "number",
+        "optional": true
+      },
+      {
+        "label": "Persist Label",
+        "name": "persistLabel",
+        "type": "boolean",
+        "optional": true
+      }
+    ],
+    "outputs": []
+  },
+  {
+    "label": "Message Type Classifier",
+    "name": "MESSAGE_TYPE_CLASSIFIER",
+    "type": "Output",
+    "category": "SwitchCaseTransformer",
+    "description": "A transformer which classifies an input into a label based on the MessageType parameter.",
+    "baseClasses": ["xMessage"],
+    "inputs": [
+      {
+        "label": "XMessage",
+        "name": "xmessage",
+        "type": "xMessage",
+        "list": true
+      }
+    ],
+    "outputs": [
+      {
+        "label": "HSM",
+        "name": "HSM",
+        "baseClasses": ["xMessage"]
+      },
+      {
+        "label": "TEXT",
+        "name": "TEXT",
+        "baseClasses": ["xMessage"]
+      },
+      {
+        "label": "IMAGE",
+        "name": "IMAGE",
+        "baseClasses": ["xMessage"]
+      },
+      {
+        "label": "VIDEO",
+        "name": "VIDEO",
+        "baseClasses": ["xMessage"]
+      },
+      {
+        "label": "AUDIO",
+        "name": "AUDIO",
+        "baseClasses": ["xMessage"]
+      },
+      {
+        "label": "DOCUMENT",
+        "name": "DOCUMENT",
+        "baseClasses": ["xMessage"]
+      },
+      {
+        "label": "LOCATION",
+        "name": "LOCATION",
+        "baseClasses": ["xMessage"]
+      },
+      {
+        "label": "BROADCAST_TEXT",
+        "name": "BROADCAST_TEXT",
+        "baseClasses": ["xMessage"]
+      }
+    ]
+  },
+  {
+    "label": "Code Runner Transformer",
+    "name": "CODE_RUNNER",
+    "type": "Output",
+    "category": "GenericTransformer",
+    "description": "A code runner capable of running custom JS code.",
+    "baseClasses": ["xMessage"],
+    "inputs": [
+      {
+        "label": "XMessage",
+        "name": "xmessage",
+        "type": "xMessage",
+        "list": true
+      },
+      {
+        "label": "Code",
+        "name": "code",
+        "type": "ide",
+        "rows": 2
+      }
+    ],
+    "outputs": [
+      {
+        "label": "On Success",
+        "name": "onSuccess",
+        "baseClasses": ["xMessage"]
+      },
+      {
+        "label": "On Error",
+        "name": "onError",
+        "baseClasses": ["xMessage"]
+      }
+    ]
+  },
+  {
+    "label": "Speech To Text",
+    "name": "SPEECH_TO_TEXT",
+    "type": "Output",
+    "category": "GenericTransformer",
+    "description": "Converts an audio file provided by a URL into text.",
+    "baseClasses": ["xMessage"],
+    "inputs": [
+      {
+        "label": "XMessage",
+        "name": "xmessage",
+        "type": "xMessage",
+        "list": true
+      },
+      {
+        "label": "Base Url",
+        "name": "baseUrl",
+        "type": "string"
+      },
+      {
+        "label": "Language",
+        "name": "language",
+        "type": "string"
+      },
+      {
+        "label": "Spell Check",
+        "name": "spellCheck",
+        "type": "string"
+      },
+      {
+        "label": "Persist",
+        "name": "persist",
+        "type": "boolean"
+      }
+    ],
+    "outputs": [
+      {
+        "label": "On Success",
+        "name": "onSuccess",
+        "baseClasses": ["xMessage"]
+      },
+      {
+        "label": "On Error",
+        "name": "onError",
+        "baseClasses": ["xMessage"]
+      }
+    ]
+  },
+  {
+    "label": "Field Setter Transformer",
+    "name": "FIELD_SETTER",
+    "type": "Output",
+    "category": "GenericTransformer",
+    "description": "Field Setter Transformer.",
+    "baseClasses": ["xMessage"],
+    "inputs": [
+      {
+        "label": "XMessage",
+        "name": "xmessage",
+        "type": "xMessage",
+        "list": true
+      },
+      {
+        "label": "Setters",
+        "name": "setters",
+        "type": "json",
+        "rows": 2
+      }
+    ],
+    "outputs": [
+      {
+        "label": "On Success",
+        "name": "onSuccess",
+        "baseClasses": ["xMessage"]
+      }
+    ]
+  },
+  {
+    "label": "Document Retriever",
+    "name": "DOC_RETRIEVER",
+    "type": "Output",
+    "category": "IfElseTransformer",
+    "description": "A transformer that retrieves documents for adding external context.",
+    "baseClasses": ["xMessage"],
+    "inputs": [
+      {
+        "label": "XMessage",
+        "name": "xmessage",
+        "type": "xMessage",
+        "list": true
+      },
+      {
+        "label": "URL",
+        "name": "url",
+        "type": "string"
+      },
+      {
+        "label": "Document IDs",
+        "name": "documentIds",
+        "type": "string",
+        "optional": true
+      },
+      {
+        "label": "Top K",
+        "name": "topK",
+        "type": "string",
+        "optional": true
+      },
+      {
+        "label": "Threshold",
+        "name": "threshold",
+        "type": "number",
+        "optional": true
+      },
+      {
+        "label": "Static No Content Response",
+        "name": "staticNoContentResponse",
+        "type": "string",
+        "optional": true
+      },
+      {
+        "label": "Search All Docs",
+        "name": "searchAll",
+        "type": "boolean",
+        "optional": true
+      },
+      {
+        "label": "Logic",
+        "name": "logic",
+        "type": "string",
+        "optional": true
+      },
+      {
+        "label": "Recipe Config",
+        "name": "recipeConfig",
+        "type": "json",
+        "optional": true
+      }
+    ],
+    "outputs": [
+      {
+        "label": "If",
+        "name": "if",
+        "baseClasses": ["xMessage"]
+      },
+      {
+        "label": "Else",
+        "name": "else",
+        "baseClasses": ["xMessage"]
+      }
+    ]
+  },
+  {
+    "label": "Query Cache Transformer",
+    "name": "QUERY_CACHE",
+    "type": "Output",
+    "category": "IfElseTransformer",
+    "description": "A transformer capable of retrieving cached response for a query from an API.",
+    "baseClasses": ["xMessage"],
+    "inputs": [
+      {
+        "label": "XMessage",
+        "name": "xmessage",
+        "type": "xMessage",
+        "list": true
+      },
+      {
+        "label": "URL",
+        "name": "url",
+        "type": "string"
+      },
+      {
+        "label": "Threshold",
+        "name": "threshold",
+        "type": "number",
+        "optional": true
+      },
+      {
+        "label": "Query",
+        "name": "query",
+        "type": "string",
+        "optional": true
+      },
+      {
+        "label": "Persist",
+        "name": "persist",
+        "type": "boolean",
+        "optional": true
+      }
+    ],
+    "outputs": [
+      {
+        "label": "Hit",
+        "name": "if",
+        "baseClasses": ["xMessage"]
+      },
+      {
+        "label": "Miss",
+        "name": "else",
+        "baseClasses": ["xMessage"]
+      }
+    ]
+  },
+  {
+    "label": "HTTP GET Transformer",
+    "name": "HTTP_GET",
+    "type": "Output",
+    "category": "GenericTransformer",
+    "description": "A transformer capable of making HTTP GET request.",
+    "baseClasses": ["xMessage"],
+    "inputs": [
+      {
+        "label": "XMessage",
+        "name": "xmessage",
+        "type": "xMessage",
+        "list": true
+      },
+      {
+        "label": "URL",
+        "name": "url",
+        "type": "string"
+      },
+      {
+        "label": "Headers",
+        "name": "headers",
+        "type": "json",
+        "rows": 2,
+        "optional": true
+      },
+      {
+        "label": "Query",
+        "name": "query",
+        "type": "string",
+        "optional": true
+      }
+    ],
+    "outputs": [
+      {
+        "label": "On Success",
+        "name": "onSuccess",
+        "baseClasses": ["xMessage"]
+      },
+      {
+        "label": "On Error",
+        "name": "onError",
+        "baseClasses": ["xMessage"]
+      }
+    ]
+  },
+  {
+    "label": "HTTP POST Transformer",
+    "name": "HTTP_POST",
+    "type": "Output",
+    "category": "GenericTransformer",
+    "description": "A transformer capable of making HTTP POST request.",
+    "baseClasses": ["xMessage"],
+    "inputs": [
+      {
+        "label": "XMessage",
+        "name": "xmessage",
+        "type": "xMessage",
+        "list": true
+      },
+      {
+        "label": "URL",
+        "name": "url",
+        "type": "string"
+      },
+      {
+        "label": "Headers",
+        "name": "headers",
+        "type": "json",
+        "rows": 2,
+        "optional": true
+      },
+      {
+        "label": "Body",
+        "name": "body",
+        "type": "string",
+        "rows": 2,
+        "optional": true
+      }
+    ],
+    "outputs": [
+      {
+        "label": "On Success",
+        "name": "onSuccess",
+        "baseClasses": ["xMessage"]
+      },
+      {
+        "label": "On Error",
+        "name": "onError",
+        "baseClasses": ["xMessage"]
+      }
+    ]
+  },
+  {
+    "label": "LLM Transformer",
+    "category": "GenericTransformer",
+    "name": "LLM",
+    "description": "A general LLM model based transformer.",
+    "baseClasses": ["xMessage"],
+    "inputs": [
+      {
+        "label": "XMessage",
+        "name": "xmessage",
+        "type": "xMessage",
+        "list": true
+      },
+      {
+        "label": "API Key",
+        "name": "APIKey",
+        "type": "string"
+      },
+      {
+        "label": "Model",
+        "name": "model",
+        "type": "string"
+      },
+      {
+        "label": "Prompt",
+        "name": "prompt",
+        "type": "string"
+      },
+      {
+        "label": "Corpus Prompt",
+        "name": "corpusPrompt",
+        "type": "string"
+      },
+      {
+        "label": "Temperature",
+        "name": "temperature",
+        "type": "number"
+      },
+      {
+        "label": "Enable Stream",
+        "name": "enableStream",
+        "type": "boolean"
+      },
+      {
+        "label": "Output Language",
+        "name": "outputLanguage",
+        "type": "string"
+      },
+      {
+        "label": "Outbound URL",
+        "name": "outboundURL",
+        "type": "string"
+      },
+      {
+        "label": "Bhashini User ID",
+        "name": "bhashiniUserId",
+        "type": "string"
+      },
+      {
+        "label": "Bhashini API Key",
+        "name": "bhashiniAPIKey",
+        "type": "string"
+      },
+      {
+        "label": "Bhashini URL",
+        "name": "bhashiniURL",
+        "type": "string"
+      },
+      {
+        "label": "Provider",
+        "name": "provider",
+        "type": "string"
+      },
+      {
+        "label": "Context Length",
+        "name": "contextLength",
+        "type": "number"
+      },
+      {
+        "label": "Language Provider",
+        "name": "languageProvider",
+        "type": "string"
+      }
+    ],
+    "outputs": [
+      {
+        "label": "On Success",
+        "name": "onSuccess",
+        "baseClasses": ["xMessage"]
+      },
+      {
+        "label": "On Error",
+        "name": "onError",
+        "baseClasses": ["xMessage"]
+      }
+    ]
+  },
+  {
+    "label": "Neural Coreference",
+    "category": "GenericTransformer",
+    "name": "NEURAL_COREFERENCE",
+    "type": "Output",
+    "description": "A transformer to add coreferenced context.",
+    "baseClasses": ["xMessage"],
+    "inputs": [
+      {
+        "label": "XMessage",
+        "name": "xmessage",
+        "type": "xMessage",
+        "list": true
+      },
+      {
+        "label": "Prompt",
+        "name": "prompt",
+        "type": "string"
+      },
+      {
+        "label": "API Key",
+        "name": "APIKey",
+        "type": "string"
+      }
+    ],
+    "outputs": [
+      {
+        "label": "On Success",
+        "name": "onSuccess",
+        "baseClasses": ["xMessage"]
+      },
+      {
+        "label": "On Error",
+        "name": "onError",
+        "baseClasses": ["xMessage"]
+      }
+    ]
+  },
+  {
+    "label": "Random Binary",
+    "category": "IfElseTransformer",
+    "name": "RANDOM_BINARY",
+    "type": "Output",
+    "description": "A transformer that randomly outputs a binary state.",
+    "baseClasses": ["xMessage"],
+    "inputs": [
+      {
+        "label": "XMessage",
+        "name": "xmessage",
+        "type": "xMessage",
+        "list": true
+      }
+    ]
+  },
+  {
+    "label": "Simple Retry",
+    "category": "RetryTransformer",
+    "name": "SIMPLE_RETRY",
+    "type": "Output",
+    "description": "A transformer which can be used to add retry mechanism.",
+    "baseClasses": ["xMessage"],
+    "inputs": [
+      {
+        "label": "XMessage",
+        "name": "xmessage",
+        "type": "xMessage",
+        "list": true
+      },
+      {
+        "label": "Retries",
+        "name": "retries",
+        "type": "number",
+        "optional": true
+      },
+      {
+        "label": "Delay",
+        "name": "delay",
+        "type": "number",
+        "optional": true
+      }
+    ]
+  },
+  {
+    "label": "SQL LLM Transformer",
+    "category": "GenericTransformer",
+    "name": "SQLLLM",
+    "type": "Output",
+    "description": "A code runner capable of running custom JS code.",
+    "baseClasses": ["xMessage"],
+    "inputs": [
+      {
+        "label": "XMessage",
+        "name": "xmessage",
+        "type": "xMessage",
+        "list": true
+      },
+      {
+        "label": "API Key",
+        "name": "APIKey",
+        "type": "string"
+      },
+      {
+        "label": "Model",
+        "name": "model",
+        "type": "string"
+      },
+      {
+        "label": "XlsxIds",
+        "name": "xlsxIds",
+        "type": "string"
+      },
+      {
+        "label": "Outbound URL",
+        "name": "outboundURL",
+        "type": "string"
+      },
+      {
+        "label": "Output Language",
+        "name": "outputLanguage",
+        "type": "string"
+      },
+      {
+        "label": "Excel Parser URL",
+        "name": "excelParserURL",
+        "type": "string"
+      },
+      {
+        "label": "Bhashini User ID",
+        "name": "bhashiniUserId",
+        "type": "string"
+      },
+      {
+        "label": "Bhashini API Key",
+        "name": "bhashiniAPIKey",
+        "type": "string"
+      },
+      {
+        "label": "Bhashini URL",
+        "name": "bhashiniURL",
+        "type": "string"
+      },
+      {
+        "label": "Prompt",
+        "name": "prompt",
+        "type": "string",
+        "optional": true
+      },
+      {
+        "label": "Temperature",
+        "name": "temperature",
+        "type": "number",
+        "optional": true
+      }
+    ],
+    "outputs": [
+      {
+        "label": "On Success",
+        "name": "onSuccess",
+        "baseClasses": ["xMessage"]
+      },
+      {
+        "label": "On Error",
+        "name": "onError",
+        "baseClasses": ["xMessage"]
+      }
+    ]
+  },
+  {
+    "label": "Translate Transformer",
+    "category": "GenericTransformer",
+    "name": "TRANSLATE",
+    "type": "Output",
+    "description": "A code runner capable of running custom JS code.",
+    "baseClasses": ["xMessage"],
+    "inputs": [
+      {
+        "label": "XMessage",
+        "name": "xmessage",
+        "type": "xMessage",
+        "list": true
+      },
+      {
+        "label": "Provider",
+        "name": "provider",
+        "type": "string"
+      },
+      {
+        "label": "Input Language",
+        "name": "inputLanguage",
+        "type": "string"
+      },
+      {
+        "label": "Output Language",
+        "name": "outputLanguage",
+        "type": "string"
+      },
+      {
+        "label": "Bhashini User ID",
+        "name": "bhashiniUserId",
+        "type": "string"
+      },
+      {
+        "label": "Bhashini API Key",
+        "name": "bhashiniAPIKey",
+        "type": "string"
+      },
+      {
+        "label": "Bhashini URL",
+        "name": "bhashiniURL",
+        "type": "string"
+      }
+    ],
+    "outputs": [
+      {
+        "label": "On Success",
+        "name": "onSuccess",
+        "baseClasses": ["xMessage"]
+      },
+      {
+        "label": "On Error",
+        "name": "onError",
+        "baseClasses": ["xMessage"]
+      }
+    ]
+  },
+  {
+    "label": "User Feedback Loop",
+    "category": "StateRestoreTransformer",
+    "name": "USER_FEEDBACK_LOOP",
+    "type": "Output",
+    "description": "A transformer which restores state to a specific node after sending a message to user.",
+    "baseClasses": ["xMessage"],
+    "inputs": [
+      {
+        "label": "XMessage",
+        "name": "xmessage",
+        "type": "xMessage",
+        "list": true
+      }
+    ],
+    "outputs": [
+      {
+        "label": "Restore State",
+        "name": "restoreState",
+        "baseClasses": ["xMessage"]
+      }
+    ]
+  },{
+    "label": "Start",
+    "category": "Miscellaneous",
+    "name": "start",
+    "type": "Output",
+    "description": "Start pointer Points to node  ",
+    "baseClasses": ["xMessage"],
+    "inputs": [],
+    "outputs": [
+      {
+        "label": "start Pointer",
+        "name": "startPointer",
+        "baseClasses": ["xMessage"]
+      }
+    ]
+  }
+]
