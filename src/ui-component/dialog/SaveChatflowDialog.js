@@ -1,5 +1,4 @@
-import { createPortal } from "react-dom";
-import { useState, useEffect } from "react";
+import React, { useState, useEffect } from "react";
 import PropTypes from "prop-types";
 
 import {
@@ -10,11 +9,9 @@ import {
   OutlinedInput,
   DialogTitle,
 } from "@mui/material";
-import { StyledButton } from "../../ui-component/button/StyledButton";
+import { StyledButton } from "../button/StyledButton";
 
 const SaveChatflowDialog = ({ show, dialogProps, onCancel, onConfirm }) => {
-  const portalElement = document.getElementById("portal");
-
   const [chatflowName, setChatflowName] = useState("");
   const [isReadyToSave, setIsReadyToSave] = useState(false);
 
@@ -23,7 +20,7 @@ const SaveChatflowDialog = ({ show, dialogProps, onCancel, onConfirm }) => {
     else setIsReadyToSave(false);
   }, [chatflowName]);
 
-  const component = show ? (
+  return (
     <Dialog
       open={show}
       fullWidth
@@ -57,9 +54,7 @@ const SaveChatflowDialog = ({ show, dialogProps, onCancel, onConfirm }) => {
         </StyledButton>
       </DialogActions>
     </Dialog>
-  ) : null;
-
-  return createPortal(component, portalElement);
+  );
 };
 
 SaveChatflowDialog.propTypes = {

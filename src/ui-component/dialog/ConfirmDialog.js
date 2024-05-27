@@ -1,4 +1,4 @@
-import { createPortal } from "react-dom";
+import React from "react";
 import {
   Button,
   Dialog,
@@ -7,13 +7,12 @@ import {
   DialogTitle,
 } from "@mui/material";
 import useConfirm from "../../hooks/useConfirm";
-import { StyledButton } from "../../ui-component/button/StyledButton";
+import { StyledButton } from "../button/StyledButton";
 
 const ConfirmDialog = () => {
   const { onConfirm, onCancel, confirmState } = useConfirm();
-  const portalElement = document.getElementById("portal");
 
-  const component = confirmState.show ? (
+  return (
     <Dialog
       fullWidth
       maxWidth="xs"
@@ -35,9 +34,7 @@ const ConfirmDialog = () => {
         </StyledButton>
       </DialogActions>
     </Dialog>
-  ) : null;
-
-  return createPortal(component, portalElement);
+  );
 };
 
 export default ConfirmDialog;

@@ -6,7 +6,7 @@ import ReactFlow, {
   useEdgesState,
 } from "reactflow";
 import "reactflow/dist/style.css";
-// import 'views/canvas/index.css'
+import "../../views/canvas/index.css";
 
 import { useLocation, useNavigate } from "react-router-dom";
 

@@ -43,7 +43,7 @@ import databaseApi from "../../../../api/database";
 
 import { SET_MENU } from "../../../../store/actions";
 
-// import "./index.css";
+import "./index.css";
 
 // ==============================|| PROFILE MENU ||============================== //
 

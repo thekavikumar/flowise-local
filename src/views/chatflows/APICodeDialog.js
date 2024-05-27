@@ -1,9 +1,5 @@
-import { createPortal } from "react-dom";
-import { useNavigate } from "react-router-dom";
-import { useState, useEffect } from "react";
-import { useDispatch } from "react-redux";
+import React, { useState, useEffect } from "react";
 import PropTypes from "prop-types";
-
 import {
   Tabs,
   Tab,
@@ -19,8 +15,6 @@ import { Dropdown } from "../../ui-component/dropdown/Dropdown";
 import ShareChatbot from "./ShareChatbot";
 import EmbedChat from "./EmbedChat";
 
-// Const
-import { baseURL } from "../../store/constant";
 import { SET_CHATFLOW } from "../../store/actions";
 
 // Images
@@ -39,6 +33,8 @@ import configApi from "../../api/config";
 import useApi from "../../hooks/useApi";
 import { CheckboxInput } from "../../ui-component/checkbox/Checkbox";
 import { TableViewOnly } from "../../ui-component/table/Table";
+import { useNavigate } from "react-router-dom";
+import { useDispatch } from "react-redux";
 
 function TabPanel(props) {
   const { children, value, index, ...other } = props;
@@ -77,78 +73,7 @@ const unshiftFiles = (configData) => {
   return configData;
 };
 
-const getConfigExamplesForJS = (configData, bodyType) => {
-  let finalStr = "";
-  configData = unshiftFiles(configData);
-  const loop = Math.min(configData.length, 4);
-  for (let i = 0; i < loop; i += 1) {
-    const config = configData[i];
-    let exampleVal = `"example"`;
-    if (config.type === "string") exampleVal = `"example"`;
-    else if (config.type === "boolean") exampleVal = `true`;
-    else if (config.type === "number") exampleVal = `1`;
-    else if (config.name === "files") exampleVal = `input.files[0]`;
-    finalStr +=
-      bodyType === "json"
-        ? `\n      "${config.name}": ${exampleVal},`
-        : `formData.append("${config.name}", ${exampleVal})\n`;
-    if (i === loop - 1 && bodyType !== "json")
-      `formData.append("question", "Hey, how are you?")\n`;
-  }
-  return finalStr;
-};
-
-const getConfigExamplesForPython = (configData, bodyType) => {
-  let finalStr = "";
-  configData = unshiftFiles(configData);
-  const loop = Math.min(configData.length, 4);
-  for (let i = 0; i < loop; i += 1) {
-    const config = configData[i];
-    let exampleVal = `"example"`;
-    if (config.type === "string") exampleVal = `"example"`;
-    else if (config.type === "boolean") exampleVal = `true`;
-    else if (config.type === "number") exampleVal = `1`;
-    else if (config.name === "files")
-      exampleVal = `('example${config.type}', open('example${config.type}', 'rb'))`;
-    finalStr +=
-      bodyType === "json"
-        ? `\n        "${config.name}": ${exampleVal},`
-        : `\n    "${config.name}": ${exampleVal},`;
-    if (i === loop - 1 && bodyType !== "json")
-      finalStr += `\n    "question": "Hey, how are you?"\n`;
-  }
-  return finalStr;
-};
-
-const getConfigExamplesForCurl = (configData, bodyType) => {
-  let finalStr = "";
-  configData = unshiftFiles(configData);
-  const loop = Math.min(configData.length, 4);
-  for (let i = 0; i < loop; i += 1) {
-    const config = configData[i];
-    let exampleVal = `example`;
-    if (config.type === "string")
-      exampleVal = bodyType === "json" ? `"example"` : `example`;
-    else if (config.type === "boolean") exampleVal = `true`;
-    else if (config.type === "number") exampleVal = `1`;
-    else if (config.name === "files")
-      exampleVal = `@/home/user1/Desktop/example${config.type}`;
-    finalStr +=
-      bodyType === "json"
-        ? `"${config.name}": ${exampleVal}`
-        : `\n     -F "${config.name}=${exampleVal}"`;
-    if (i === loop - 1)
-      finalStr +=
-        bodyType === "json"
-          ? ` }`
-          : ` \\\n     -F "question=Hey, how are you?"`;
-    else finalStr += bodyType === "json" ? `, ` : ` \\`;
-  }
-  return finalStr;
-};
-
 const APICodeDialog = ({ show, dialogProps, onCancel }) => {
-  const portalElement = document.getElementById("portal");
   const navigate = useNavigate();
   const dispatch = useDispatch();
 
@@ -195,351 +120,6 @@ const APICodeDialog = ({ show, dialogProps, onCancel }) => {
     setValue(newValue);
   };
 
-  const getCode = (codeLang) => {
-    if (codeLang === "Python") {
-      return `import requests
-
-API_URL = "${baseURL}/api/v1/prediction/${dialogProps.chatflowid}"
-
-def query(payload):
-    response = requests.post(API_URL, json=payload)
-    return response.json()
-    
-output = query({
-    "question": "Hey, how are you?",
-})
-`;
-    } else if (codeLang === "JavaScript") {
-      return `async function query(data) {
-    const response = await fetch(
-        "${baseURL}/api/v1/prediction/${dialogProps.chatflowid}",
-        {
-            method: "POST",
-            headers: {
-                "Content-Type": "application/json"
-            },
-            body: JSON.stringify(data)
-        }
-    );
-    const result = await response.json();
-    return result;
-}
-
-query({"question": "Hey, how are you?"}).then((response) => {
-    console.log(response);
-});
-`;
-    } else if (codeLang === "cURL") {
-      return `curl ${baseURL}/api/v1/prediction/${dialogProps.chatflowid} \\
-     -X POST \\
-     -d '{"question": "Hey, how are you?"}' \\
-     -H "Content-Type: application/json"`;
-    }
-    return "";
-  };
-
-  const getCodeWithAuthorization = (codeLang) => {
-    if (codeLang === "Python") {
-      return `import requests
-
-API_URL = "${baseURL}/api/v1/prediction/${dialogProps.chatflowid}"
-headers = {"Authorization": "Bearer ${selectedApiKey?.apiKey}"}
-
-def query(payload):
-    response = requests.post(API_URL, headers=headers, json=payload)
-    return response.json()
-    
-output = query({
-    "question": "Hey, how are you?",
-})
-`;
-    } else if (codeLang === "JavaScript") {
-      return `async function query(data) {
-    const response = await fetch(
-        "${baseURL}/api/v1/prediction/${dialogProps.chatflowid}",
-        {
-            headers: {
-                Authorization: "Bearer ${selectedApiKey?.apiKey}",
-                "Content-Type": "application/json"
-            },
-            method: "POST",
-            body: JSON.stringify(data)
-        }
-    );
-    const result = await response.json();
-    return result;
-}
-
-query({"question": "Hey, how are you?"}).then((response) => {
-    console.log(response);
-});
-`;
-    } else if (codeLang === "cURL") {
-      return `curl ${baseURL}/api/v1/prediction/${dialogProps.chatflowid} \\
-     -X POST \\
-     -d '{"question": "Hey, how are you?"}' \\
-     -H "Content-Type: application/json" \\
-     -H "Authorization: Bearer ${selectedApiKey?.apiKey}"`;
-    }
-    return "";
-  };
-
-  const getLang = (codeLang) => {
-    if (codeLang === "Python") {
-      return "python";
-    } else if (codeLang === "JavaScript") {
-      return "javascript";
-    } else if (codeLang === "cURL") {
-      return "bash";
-    }
-    return "python";
-  };
-
-  const getSVG = (codeLang) => {
-    if (codeLang === "Python") {
-      return pythonSVG;
-    } else if (codeLang === "JavaScript") {
-      return javascriptSVG;
-    } else if (codeLang === "Embed") {
-      return EmbedSVG;
-    } else if (codeLang === "cURL") {
-      return cURLSVG;
-    } else if (codeLang === "Share Chatbot") {
-      return ShareChatbotSVG;
-    }
-    return pythonSVG;
-  };
-
-  // ----------------------------CONFIG FORM DATA --------------------------//
-
-  const getConfigCodeWithFormData = (codeLang, configData) => {
-    if (codeLang === "Python") {
-      return `import requests
-
-API_URL = "${baseURL}/api/v1/prediction/${dialogProps.chatflowid}"
-
-# use form data to upload files
-form_data = {${getConfigExamplesForPython(configData, "formData")}}
-
-def query(form_data):
-    response = requests.post(API_URL, files=form_data)
-    return response.json()
-
-output = query(form_data)
-`;
-    } else if (codeLang === "JavaScript") {
-      return `// use FormData to upload files
-let formData = new FormData();
-${getConfigExamplesForJS(configData, "formData")}
-async function query(formData) {
-    const response = await fetch(
-        "${baseURL}/api/v1/prediction/${dialogProps.chatflowid}",
-        {
-            method: "POST",
-            body: formData
-        }
-    );
-    const result = await response.json();
-    return result;
-}
-
-query(formData).then((response) => {
-    console.log(response);
-});
-`;
-    } else if (codeLang === "cURL") {
-      return `curl ${baseURL}/api/v1/prediction/${dialogProps.chatflowid} \\
-     -X POST \\${getConfigExamplesForCurl(configData, "formData")} \\
-     -H "Content-Type: multipart/form-data"`;
-    }
-    return "";
-  };
-
-  // ----------------------------CONFIG FORM DATA with AUTH--------------------------//
-
-  const getConfigCodeWithFormDataWithAuth = (codeLang, configData) => {
-    if (codeLang === "Python") {
-      return `import requests
-
-API_URL = "${baseURL}/api/v1/prediction/${dialogProps.chatflowid}"
-headers = {"Authorization": "Bearer ${selectedApiKey?.apiKey}"}
-
-# use form data to upload files
-form_data = {${getConfigExamplesForPython(configData, "formData")}}
-
-def query(form_data):
-    response = requests.post(API_URL, headers=headers, files=form_data)
-    return response.json()
-
-output = query(form_data)
-`;
-    } else if (codeLang === "JavaScript") {
-      return `// use FormData to upload files
-let formData = new FormData();
-${getConfigExamplesForJS(configData, "formData")}
-async function query(formData) {
-    const response = await fetch(
-        "${baseURL}/api/v1/prediction/${dialogProps.chatflowid}",
-        {
-            headers: { Authorization: "Bearer ${selectedApiKey?.apiKey}" },
-            method: "POST",
-            body: formData
-        }
-    );
-    const result = await response.json();
-    return result;
-}
-
-query(formData).then((response) => {
-    console.log(response);
-});
-`;
-    } else if (codeLang === "cURL") {
-      return `curl ${baseURL}/api/v1/prediction/${dialogProps.chatflowid} \\
-     -X POST \\${getConfigExamplesForCurl(configData, "formData")} \\
-     -H "Content-Type: multipart/form-data" \\
-     -H "Authorization: Bearer ${selectedApiKey?.apiKey}"`;
-    }
-    return "";
-  };
-
-  // ----------------------------CONFIG JSON--------------------------//
-
-  const getConfigCode = (codeLang, configData) => {
-    if (codeLang === "Python") {
-      return `import requests
-
-API_URL = "${baseURL}/api/v1/prediction/${dialogProps.chatflowid}"
-
-def query(payload):
-    response = requests.post(API_URL, json=payload)
-    return response.json()
-
-output = query({
-    "question": "Hey, how are you?",
-    "overrideConfig": {${getConfigExamplesForPython(configData, "json")}
-    }
-})
-`;
-    } else if (codeLang === "JavaScript") {
-      return `async function query(data) {
-    const response = await fetch(
-        "${baseURL}/api/v1/prediction/${dialogProps.chatflowid}",
-        {
-            method: "POST",
-            headers: {
-                "Content-Type": "application/json"
-            },
-            body: JSON.stringify(data)
-        }
-    );
-    const result = await response.json();
-    return result;
-}
-
-query({
-  "question": "Hey, how are you?",
-  "overrideConfig": {${getConfigExamplesForJS(configData, "json")}
-  }
-}).then((response) => {
-    console.log(response);
-});
-`;
-    } else if (codeLang === "cURL") {
-      return `curl ${baseURL}/api/v1/prediction/${dialogProps.chatflowid} \\
-     -X POST \\
-     -d '{"question": "Hey, how are you?", "overrideConfig": {${getConfigExamplesForCurl(configData, "json")}}' \\
-     -H "Content-Type: application/json"`;
-    }
-    return "";
-  };
-
-  // ----------------------------CONFIG JSON with AUTH--------------------------//
-
-  const getConfigCodeWithAuthorization = (codeLang, configData) => {
-    if (codeLang === "Python") {
-      return `import requests
-
-API_URL = "${baseURL}/api/v1/prediction/${dialogProps.chatflowid}"
-headers = {"Authorization": "Bearer ${selectedApiKey?.apiKey}"}
-
-def query(payload):
-    response = requests.post(API_URL, headers=headers, json=payload)
-    return response.json()
-
-output = query({
-    "question": "Hey, how are you?",
-    "overrideConfig": {${getConfigExamplesForPython(configData, "json")}
-    }
-})
-`;
-    } else if (codeLang === "JavaScript") {
-      return `async function query(data) {
-    const response = await fetch(
-        "${baseURL}/api/v1/prediction/${dialogProps.chatflowid}",
-        {
-            headers: {
-                Authorization: "Bearer ${selectedApiKey?.apiKey}",
-                "Content-Type": "application/json"
-            },
-            method: "POST",
-            body: JSON.stringify(data)
-        }
-    );
-    const result = await response.json();
-    return result;
-}
-
-query({
-  "question": "Hey, how are you?",
-  "overrideConfig": {${getConfigExamplesForJS(configData, "json")}
-  }
-}).then((response) => {
-    console.log(response);
-});
-`;
-    } else if (codeLang === "cURL") {
-      return `curl ${baseURL}/api/v1/prediction/${dialogProps.chatflowid} \\
-     -X POST \\
-     -d '{"question": "Hey, how are you?", "overrideConfig": {${getConfigExamplesForCurl(configData, "json")}}' \\
-     -H "Content-Type: application/json" \\
-     -H "Authorization: Bearer ${selectedApiKey?.apiKey}"`;
-    }
-    return "";
-  };
-
-  useEffect(() => {
-    if (getAllAPIKeysApi.data) {
-      const options = [
-        {
-          label: "No Authorization",
-          name: "",
-        },
-      ];
-      for (const key of getAllAPIKeysApi.data) {
-        options.push({
-          label: key.keyName,
-          name: key.id,
-        });
-      }
-      options.push({
-        label: "- Add New Key -",
-        name: "addnewkey",
-      });
-      setKeyOptions(options);
-      setAPIKeys(getAllAPIKeysApi.data);
-
-      if (dialogProps.chatflowApiKeyId) {
-        setChatflowApiKeyId(dialogProps.chatflowApiKeyId);
-        setSelectedApiKey(
-          getAllAPIKeysApi.data.find(
-            (key) => key.id === dialogProps.chatflowApiKeyId
-          )
-        );
-      }
-    }
-  }, [dialogProps, getAllAPIKeysApi.data]);
-
   useEffect(() => {
     if (show) {
       getAllAPIKeysApi.request();
@@ -547,7 +127,7 @@ query({
     }
   }, [show]);
 
-  const component = show ? (
+  return (
     <Dialog
       open={show}
       fullWidth
@@ -573,126 +153,90 @@ query({
                 <Tab
                   icon={
                     <img
-                      style={{ objectFit: "cover", height: 15, width: "auto" }}
-                      src={getSVG(codeLang)}
-                      alt="code"
+                      style={{ objectFit: "cover", height: "24px" }}
+                      src={
+                        codeLang === "Python"
+                          ? pythonSVG
+                          : codeLang === "JavaScript"
+                            ? javascriptSVG
+                            : codeLang === "cURL"
+                              ? cURLSVG
+                              : codeLang === "Embed"
+                                ? EmbedSVG
+                                : ShareChatbotSVG
+                      }
+                      alt={codeLang}
                     />
                   }
-                  iconPosition="start"
-                  key={index}
                   label={codeLang}
                   {...a11yProps(index)}
-                ></Tab>
+                />
               ))}
             </Tabs>
+            <TabPanel value={value} index={0}>
+              <EmbedChat dialogProps={dialogProps} />
+            </TabPanel>
+            <TabPanel value={value} index={1}>
+              <CopyBlock
+                language="python"
+                text={dialogProps.pythonCode}
+                wrapLines
+                theme={atomOneDark}
+                codeBlock
+              />
+            </TabPanel>
+            <TabPanel value={value} index={2}>
+              <CopyBlock
+                language="javascript"
+                text={dialogProps.javascriptCode}
+                wrapLines
+                theme={atomOneDark}
+                codeBlock
+              />
+            </TabPanel>
+            <TabPanel value={value} index={3}>
+              <CopyBlock
+                language="shell"
+                text={dialogProps.curlCode}
+                wrapLines
+                theme={atomOneDark}
+                codeBlock
+              />
+            </TabPanel>
+            <TabPanel value={value} index={4}>
+              <ShareChatbot dialogProps={dialogProps} />
+            </TabPanel>
           </div>
           <div style={{ flex: 20 }}>
-            <Dropdown
-              name="SelectKey"
-              disableClearable={true}
-              options={keyOptions}
-              onSelect={(newValue) => onApiKeySelected(newValue)}
-              value={
-                dialogProps.chatflowApiKeyId ??
-                chatflowApiKeyId ??
-                "Choose an API key"
-              }
+            <div>
+              <h5>API Key</h5>
+              <Dropdown
+                onChange={onApiKeySelected}
+                options={keyOptions}
+                value={chatflowApiKeyId}
+                labelKey="name"
+                valueKey="id"
+                placeholder="Select API Key"
+                creatable
+                allowNew
+              />
+            </div>
+            <CheckboxInput
+              label="Stream changes to a backend server"
+              checked={checkboxVal}
+              onChange={(val) => onCheckBoxChanged(val)}
             />
+            {checkboxVal && (
+              <TableViewOnly
+                data={unshiftFiles(getConfigApi.data)}
+                paginate={false}
+              />
+            )}
           </div>
         </div>
-        <div style={{ marginTop: 10 }}></div>
-        {codes.map((codeLang, index) => (
-          <TabPanel key={index} value={value} index={index}>
-            {(codeLang === "Embed" || codeLang === "Share Chatbot") &&
-              chatflowApiKeyId && (
-                <>
-                  <p>You cannot use API key while embedding/sharing chatbot.</p>
-                  <p>
-                    Please select <b>&quot;No Authorization&quot;</b> from the
-                    dropdown at the top right corner.
-                  </p>
-                </>
-              )}
-            {codeLang === "Embed" && !chatflowApiKeyId && (
-              <EmbedChat chatflowid={dialogProps.chatflowid} />
-            )}
-            {codeLang !== "Embed" && codeLang !== "Share Chatbot" && (
-              <>
-                <CopyBlock
-                  theme={atomOneDark}
-                  text={
-                    chatflowApiKeyId
-                      ? getCodeWithAuthorization(codeLang)
-                      : getCode(codeLang)
-                  }
-                  language={getLang(codeLang)}
-                  showLineNumbers={false}
-                  wrapLines
-                />
-                <CheckboxInput
-                  label="Show Input Config"
-                  value={checkboxVal}
-                  onChange={onCheckBoxChanged}
-                />
-                {checkboxVal &&
-                  getConfigApi.data &&
-                  getConfigApi.data.length > 0 && (
-                    <>
-                      <TableViewOnly
-                        rows={getConfigApi.data}
-                        columns={Object.keys(getConfigApi.data[0])}
-                      />
-                      <CopyBlock
-                        theme={atomOneDark}
-                        text={
-                          chatflowApiKeyId
-                            ? dialogProps.isFormDataRequired
-                              ? getConfigCodeWithFormDataWithAuth(
-                                  codeLang,
-                                  getConfigApi.data
-                                )
-                              : getConfigCodeWithAuthorization(
-                                  codeLang,
-                                  getConfigApi.data
-                                )
-                            : dialogProps.isFormDataRequired
-                              ? getConfigCodeWithFormData(
-                                  codeLang,
-                                  getConfigApi.data
-                                )
-                              : getConfigCode(codeLang, getConfigApi.data)
-                        }
-                        language={getLang(codeLang)}
-                        showLineNumbers={false}
-                        wrapLines
-                      />
-                    </>
-                  )}
-                {getIsChatflowStreamingApi.data?.isStreaming && (
-                  <p>
-                    Read&nbsp;
-                    <a
-                      rel="noreferrer"
-                      target="_blank"
-                      href="https://docs.flowiseai.com/how-to-use#streaming"
-                    >
-                      here
-                    </a>
-                    &nbsp;on how to stream response back to application
-                  </p>
-                )}
-              </>
-            )}
-            {codeLang === "Share Chatbot" && !chatflowApiKeyId && (
-              <ShareChatbot />
-            )}
-          </TabPanel>
-        ))}
       </DialogContent>
     </Dialog>
-  ) : null;
-
-  return createPortal(component, portalElement);
+  );
 };
 
 APICodeDialog.propTypes = {

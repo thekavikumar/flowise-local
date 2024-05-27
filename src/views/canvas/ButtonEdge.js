@@ -5,7 +5,7 @@ import { useContext } from "react";
 import { SET_DIRTY } from "../../store/actions";
 import { flowContext } from "../../store/context/ReactFlowContext";
 
-// import './index.css'
+import "./index.css";
 
 const foreignObjectSize = 40;
 

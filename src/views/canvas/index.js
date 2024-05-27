@@ -115,7 +115,7 @@ const Canvas = () => {
   const createNewChatflowApi = useApi(chatflowsApi.createNewChatflow);
   const testChatflowApi = useApi(chatflowsApi.testChatflow);
   const updateChatflowApi = useApi(chatflowsApi.updateChatflow);
-  const getSpecificChatflowApi = useApi(chatflowsApi.getSpecificChatflow);
+  //const getSpecificChatflowApi = useApi(chatflowsApi.getSpecificChatflow);
 
   // ==============================|| Events & Actions ||============================== //
 
@@ -817,8 +817,9 @@ const Canvas = () => {
       };
 
       setSelectedNode(newNode);
-      setNodes((nds) =>
-        nds.concat(newNode).map((node) => {
+      setNodes((nds) => {
+        console.log("nodes:", nds);
+        return nds.concat(newNode).map((node) => {
           if (node.id === newNode.id) {
             node.data = {
               ...node.data,
@@ -832,8 +833,8 @@ const Canvas = () => {
           }
 
           return node;
-        })
-      );
+        });
+      });
       setTimeout(() => setDirty(), 0);
       debouncedSaveData();
     },
@@ -881,23 +882,23 @@ const Canvas = () => {
   // ==============================|| useEffect ||============================== //
 
   // Get specific chatflow successful
-  useEffect(() => {
-    if (getSpecificChatflowApi.data) {
-      const chatflow = getSpecificChatflowApi.data;
-      const initialFlow = chatflow.flowData
-        ? JSON.parse(chatflow.flowData)
-        : [];
-      setNodes(initialFlow.nodes || []);
-      setEdges(initialFlow.edges || []);
-      dispatch({ type: SET_CHATFLOW, chatflow });
-    } else if (getSpecificChatflowApi.error) {
-      const error = getSpecificChatflowApi.error;
-      const errorData =
-        error.response.data ||
-        `${error.response.status}: ${error.response.statusText}`;
-      errorFailed(`Failed to retrieve chatflow: ${errorData}`);
-    }
-  }, [getSpecificChatflowApi.data, getSpecificChatflowApi.error]);
+  // useEffect(() => {
+  //   if (getSpecificChatflowApi.data) {
+  //     const chatflow = getSpecificChatflowApi.data;
+  //     const initialFlow = chatflow.flowData
+  //       ? JSON.parse(chatflow.flowData)
+  //       : [];
+  //     setNodes(initialFlow.nodes || []);
+  //     setEdges(initialFlow.edges || []);
+  //     dispatch({ type: SET_CHATFLOW, chatflow });
+  //   } else if (getSpecificChatflowApi.error) {
+  //     const error = getSpecificChatflowApi.error;
+  //     const errorData =
+  //       error.response.data ||
+  //       `${error.response.status}: ${error.response.statusText}`;
+  //     errorFailed(`Failed to retrieve chatflow: ${errorData}`);
+  //   }
+  // }, [getSpecificChatflowApi.data, getSpecificChatflowApi.error]);
 
   // Create new chatflow successful
   useEffect(() => {
@@ -958,23 +959,23 @@ const Canvas = () => {
 
   // Initialization
   useEffect(() => {
-    if (chatflowId) {
-      getSpecificChatflowApi.request(chatflowId);
+    // if (chatflowId) {
+    //   getSpecificChatflowApi.request(chatflowId);
+    // } else {
+    if (localStorage.getItem("duplicatedFlowData")) {
+      handleLoadFlow(localStorage.getItem("duplicatedFlowData"));
+      setTimeout(() => localStorage.removeItem("duplicatedFlowData"), 0);
     } else {
-      if (localStorage.getItem("duplicatedFlowData")) {
-        handleLoadFlow(localStorage.getItem("duplicatedFlowData"));
-        setTimeout(() => localStorage.removeItem("duplicatedFlowData"), 0);
-      } else {
-        setNodes([]);
-        setEdges([]);
-      }
-      dispatch({
-        type: SET_CHATFLOW,
-        chatflow: {
-          name: "Untitled chatflow",
-        },
-      });
+      setNodes([]);
+      setEdges([]);
     }
+    dispatch({
+      type: SET_CHATFLOW,
+      chatflow: {
+        name: "Untitled chatflow",
+      },
+    });
+    //}
 
     getNodesApi.request();
 

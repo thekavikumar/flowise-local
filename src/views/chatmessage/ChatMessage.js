@@ -23,7 +23,7 @@ import { IconSend } from "@tabler/icons";
 import { CodeBlock } from "../../ui-component/markdown/CodeBlock";
 import { MemoizedReactMarkdown } from "../../ui-component/markdown/MemoizedReactMarkdown";
 import SourceDocDialog from "../../ui-component/dialog/SourceDocDialog";
-// import './ChatMessage.css'
+import './ChatMessage.css'
 
 // api
 import chatmessageApi from "../../api/chatmessage";

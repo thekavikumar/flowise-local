@@ -21,7 +21,7 @@ import { SwitchInput } from "../../ui-component/switch/Switch";
 import { flowContext } from "../../store/context/ReactFlowContext";
 import { isValidConnection } from "../../utils/genericHelper";
 import { TooltipWithParser } from "../../ui-component/tooltip/TooltipWithParser";
-import ToolDialog from "../../views/tools/ToolDialog";
+//import ToolDialog from "../../views/tools/ToolDialog";
 import { getInputVariables } from "../../utils/genericHelper";
 import ExpandTextDialog from "../../ui-component/dialog/ExpandTextDialog";
 const EDITABLE_TOOLS = ["selectedTool"];
@@ -490,12 +490,12 @@ const NodeInputHandler = ({
           </Box>
         </>
       )}
-      <ToolDialog
+      {/* <ToolDialog
         show={EDITABLE_TOOLS.includes(showAsyncOptionDialog)}
         dialogProps={asyncOptionEditDialogProps}
         onCancel={() => setAsyncOptionEditDialog("")}
         onConfirm={onConfirmAsyncOption}
-      ></ToolDialog>
+      ></ToolDialog> */}
     </div>
   );
 };

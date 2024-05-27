@@ -12,7 +12,7 @@ import ItemCard from "../../ui-component/cards/ItemCard";
 import { gridSpacing } from "../../store/constant";
 import ToolEmptySVG from "../../assets/images/tools_empty.svg";
 import { StyledButton } from "../../ui-component/button/StyledButton";
-import ToolDialog from "./ToolDialog";
+//import ToolDialog from "./ToolDialog";
 
 // API
 import toolsApi from "../../api/tools";
@@ -166,12 +166,12 @@ const Tools = () => {
             </Stack>
           )}
       </MainCard>
-      <ToolDialog
+      {/* <ToolDialog
         show={showDialog}
         dialogProps={dialogProps}
         onCancel={() => setShowDialog(false)}
         onConfirm={onConfirm}
-      ></ToolDialog>
+      ></ToolDialog> */}
     </>
   );
 };

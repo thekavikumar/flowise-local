@@ -17,7 +17,7 @@ import { LightCodeEditor } from "../../ui-component/editor/LightCodeEditor";
 import CodeMirror from "@uiw/react-codemirror";
 import { javascript } from "@codemirror/lang-javascript";
 import { json } from "@codemirror/lang-json";
-// import './ExpandTextDialog.css';
+import "./ExpandTextDialog.css";
 
 import { lintGutter } from "@codemirror/lint";
 import jsLinter from "./jsLinter";

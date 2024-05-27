@@ -23,7 +23,7 @@ import {
   Typography,
 } from "@mui/material";
 import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
-// import nodesData from './nodesData.json'
+import nodesData from "./nodesData.json";
 // third-party
 import PerfectScrollbar from "react-perfect-scrollbar";
 

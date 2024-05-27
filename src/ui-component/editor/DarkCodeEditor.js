@@ -4,7 +4,7 @@ import "prismjs/components/prism-clike";
 import "prismjs/components/prism-javascript";
 import "prismjs/components/prism-json";
 import "prismjs/components/prism-markup";
-// import './prism-dark.css'
+import "./prism-dark.css";
 import PropTypes from "prop-types";
 import { useTheme } from "@mui/material/styles";
 

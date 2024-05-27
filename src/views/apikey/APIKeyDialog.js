@@ -5,7 +5,7 @@ import { useDispatch } from "react-redux";
 import {
   enqueueSnackbar as enqueueSnackbarAction,
   closeSnackbar as closeSnackbarAction,
-} from ",,/,,/store/actions";
+} from "../../store/actions";
 
 import {
   Box,

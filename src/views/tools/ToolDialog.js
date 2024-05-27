@@ -19,14 +19,14 @@ import {
   Stack,
   OutlinedInput,
 } from "@mui/material";
-import { StyledButton } from "../../ui-component/button/StyledButton";
-import { Grid } from "../../ui-component/grid/Grid";
-import { TooltipWithParser } from "../../ui-component/tooltip/TooltipWithParser";
+import { StyledButton } from "../../components/flowise/button/StyledButton";
+import { Grid } from "../../components/flowise/grid/Grid";
+import { TooltipWithParser } from "../../components/flowise/tooltip/TooltipWithParser";
 import { GridActionsCellItem } from "@mui/x-data-grid";
 import DeleteIcon from "@mui/icons-material/Delete";
-import ConfirmDialog from "../../ui-component/dialog/ConfirmDialog";
-import { DarkCodeEditor } from "../../ui-component/editor/DarkCodeEditor";
-import { LightCodeEditor } from "../../ui-component/editor/LightCodeEditor";
+// import ConfirmDialog from "../../components/flowise/dialog/ConfirmDialog";
+import { DarkCodeEditor } from "../../components/flowise/editor/DarkCodeEditor";
+import { LightCodeEditor } from "../../components/flowise/editor/LightCodeEditor";
 import { useTheme } from "@mui/material/styles";
 
 // Icons
@@ -639,7 +639,7 @@ const ToolDialog = ({
           </StyledButton>
         )}
       </DialogActions>
-      <ConfirmDialog />
+      {/* <ConfirmDialog /> */}
     </Dialog>
   ) : null;
 

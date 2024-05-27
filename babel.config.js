@@ -3,12 +3,25 @@ module.exports = (api) => {
   api.cache.using(() => env === "development");
 
   return {
-    presets: ["@babel/preset-env", "@babel/preset-react"],
+    presets: [
+      "@babel/preset-env",
+      [
+        "@babel/preset-typescript",
+        {
+          onlyRemoveTypeImports: true,
+        },
+      ],
+      ["@babel/preset-react"],
+    ],
     plugins: [
       "@babel/plugin-transform-runtime",
-
-      // Stage 3
       "@babel/plugin-proposal-class-properties",
+      [
+        "@babel/plugin-transform-react-jsx",
+        {
+          runtime: "automatic",
+        },
+      ],
     ],
     env: {
       esm: {

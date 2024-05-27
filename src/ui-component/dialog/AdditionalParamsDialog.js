@@ -1,4 +1,3 @@
-import { createPortal } from "react-dom";
 import { useState, useEffect } from "react";
 import PropTypes from "prop-types";
 import { Dialog, DialogContent } from "@mui/material";
@@ -6,8 +5,6 @@ import PerfectScrollbar from "react-perfect-scrollbar";
 import NodeInputHandler from "../../views/canvas/NodeInputHandler";
 
 const AdditionalParamsDialog = ({ show, dialogProps, onCancel }) => {
-  const portalElement = document.getElementById("portal");
-
   const [inputParams, setInputParams] = useState([]);
   const [data, setData] = useState({});
 
@@ -21,7 +18,7 @@ const AdditionalParamsDialog = ({ show, dialogProps, onCancel }) => {
     };
   }, [dialogProps]);
 
-  const component = show ? (
+  return (
     <Dialog
       onClose={onCancel}
       open={show}
@@ -50,9 +47,7 @@ const AdditionalParamsDialog = ({ show, dialogProps, onCancel }) => {
         </PerfectScrollbar>
       </DialogContent>
     </Dialog>
-  ) : null;
-
-  return createPortal(component, portalElement);
+  );
 };
 
 AdditionalParamsDialog.propTypes = {
