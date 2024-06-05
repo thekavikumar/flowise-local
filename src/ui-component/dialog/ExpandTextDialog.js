@@ -1,5 +1,5 @@
 import { createPortal } from "react-dom";
-import { useState, useEffect } from "react";
+import { useState, useEffect, useCallback } from "react";
 import { useSelector } from "react-redux";
 import PropTypes from "prop-types";
 import {
@@ -14,6 +14,8 @@ import PerfectScrollbar from "react-perfect-scrollbar";
 import { StyledButton } from "../../ui-component/button/StyledButton";
 import { DarkCodeEditor } from "../../ui-component/editor/DarkCodeEditor";
 import { LightCodeEditor } from "../../ui-component/editor/LightCodeEditor";
+import "codemirror/keymap/sublime";
+import "codemirror/theme/monokai.css";
 import CodeMirror from "@uiw/react-codemirror";
 import { javascript } from "@codemirror/lang-javascript";
 import { json } from "@codemirror/lang-json";
@@ -89,12 +91,9 @@ const ExpandTextDialog = ({ show, dialogProps, onCancel, onConfirm }) => {
                             lintGutter(),
                           ]
                     }
-                    // extensions={[javascript({}), jsLinter({
-                    //   asi: true,
-                    //   expr: true,
-                    //   undef: false,
-                    // }), lintGutter()]}
-                    onChange={(code) => setInputValue(code)}
+                    onChange={(instance, change) => {
+                      setInputValue(instance.getValue());
+                    }}
                   />
                 </PerfectScrollbar>
               </div>

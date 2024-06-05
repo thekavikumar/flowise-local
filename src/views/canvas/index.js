@@ -10,7 +10,7 @@ import ReactFlow, {
 import "reactflow/dist/style.css";
 import { useDispatch, useSelector } from "react-redux";
 import { useNavigate, useLocation } from "react-router-dom";
-import { usePrompt } from "../../utils/usePrompt";
+// import { usePrompt } from "../../utils/usePrompt";
 import {
   REMOVE_DIRTY,
   SET_DIRTY,
@@ -1040,17 +1040,17 @@ const Canvas = () => {
     }
   }, [templateFlowData]);
 
-  usePrompt(
-    "You have unsaved changes! Do you want to navigate away?",
-    canvasDataStore.isDirty
-  );
+  // usePrompt(
+  //   "You have unsaved changes! Do you want to navigate away?",
+  //   canvasDataStore.isDirty
+  // );
 
   return (
     <>
       <Box>
         <AppBar
           enableColorOnDark
-          position="fixed"
+          position="relative"
           color="inherit"
           elevation={1}
           sx={{
@@ -1072,7 +1072,7 @@ const Canvas = () => {
             />
           </Toolbar>
         </AppBar>
-        <Box sx={{ pt: "70px", height: "100vh", width: "100%" }}>
+        <Box sx={{ height: "calc(100vh - 120px)", width: "100%" }}>
           <div className="reactflow-parent-wrapper">
             <div className="reactflow-wrapper" ref={reactFlowWrapper}>
               <ReactFlow
@@ -1096,6 +1096,7 @@ const Canvas = () => {
                     display: "flex",
                     flexDirection: "row",
                     left: "50%",
+                    scale: "150%",
                     transform: "translate(-50%, -50%)",
                   }}
                 />
